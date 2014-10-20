@@ -1,0 +1,7 @@
+<div class="article-control">
+	<h3><a href="{plink :Article:default, $article->id}">{$article->title}</a></h3>
+	<div class="published">{$article->published|date:'j.n.Y'}</div>
+	<p class="content">
+		{!$article->content|truncate:128}
+	</p>
+</div>

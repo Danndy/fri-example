@@ -1,0 +1,28 @@
+{block head}
+{include parent}
+<script type="text/javascript">
+	$(function() {
+		$('a[data-confirm]').click(function(e) {
+			if (!confirm($(this).data('confirm'))) {
+				e.stopImmediatePropagation();
+				return false;
+			}
+		});
+	});
+</script>
+{/block}
+
+{block content}
+<div class="article">
+	<h2>{$article->title}</h2>
+	<div class="published">{$article->published|date:'j.n.Y'}</div>
+	<p class="content">
+		{!$article->content}
+	</p>
+</div>
+<ul>
+	<li><a n:href="edit, $article->id">Editovať</a></li>
+	<li><a n:href="delete!, $article->id" data-confirm="Naozaj chcete zmazať tento článok?">Zmazať</a></li>
+	<li><a n:href="'list#article'.$article->id">Späť na zoznam</a></li>
+</ul>
+{/block}
