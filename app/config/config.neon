@@ -23,7 +23,9 @@ nette:
 services:
 	- App\Routers\RouterFactory
 	router: @App\Routers\RouterFactory::createRouter
+	authenticator: App\Models\Authenticator
 
 	database: DibiConnection(%database%)
 
 	- App\Models\ArticleModel(@database)
+	- App\Models\UserModel(@database)

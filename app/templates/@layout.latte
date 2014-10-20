@@ -9,6 +9,15 @@
 	<link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.0/themes/smoothness/jquery-ui.css" media="all" type="text/css" rel="stylesheet">
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
 	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.9.0/jquery-ui.min.js"></script>
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/screen.css">
 	<link rel="stylesheet" media="print" href="{$basePath}/css/print.css">
@@ -17,10 +26,59 @@
 </head>
 
 <body>
-	<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+	<div class="container">
+	    <nav class="navbar navbar-default" role="navigation">
+		<div class="container-fluid">
+		    <!-- Brand and toggle get grouped for better mobile display -->
+		    <div class="navbar-header">
+			<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+			    <span class="sr-only">Toggle navigation</span>
+			    <span class="icon-bar"></span>
+			    <span class="icon-bar"></span>
+			    <span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="#">FRI Example</a>
+		    </div>
 
-	{include content}
+		    <!-- Collect the nav links, forms, and other content for toggling -->
+		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			<ul class="nav navbar-nav">
+			    <li class="active"><a href="#">Skupiny</a></li>
+			    <li><a href="#">Užívatelia</a></li>
+			</ul>	    		
+			<ul class="nav navbar-nav navbar-right">
+			    <li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {if $user->isLoggedIn()}{$user->getIdentity()->name}{else}Uživateľ{/if}<span class="caret"></span></a>
+				<ul class="dropdown-menu" role="menu">
 
+				    {if $user->isLoggedIn()}
+					    <li><a n:href='Sign:out'>Odhlasit sa</a></li>
+				    {else}
+					    <li><a n:href='Sign:in' {ifCurrent Sign:in}class="active"{/ifCurrent}>Prihlásiť</a></li>
+					    <li><a n:href='Sign:up' {ifCurrent Sign:up}class="active"{/ifCurrent}>Registrovať</a></li>	
+				    {/if}	
+
+				</ul>
+			    </li>
+			</ul>
+		    </div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	    </nav>
+	</div>
+			    
+   
+	
+	<div class="container">
+		<div n:foreach="$flashes as $flash" class="flash {$flash->type}">{$flash->message}</div>
+		{include content}
+	</div>
+	
+	<div class="container">
+		<footer><!-- PHP {=PHP_VERSION} |
+			{ifset $_SERVER['SERVER_SOFTWARE']}Server {$_SERVER['SERVER_SOFTWARE']}{/ifset} |
+			Nette Framework {=Nette\Framework::VERSION}-->
+		</footer>
+	</div>
 	{block scripts}
 	<script src="{$basePath}/js/jquery.js"></script>
 	<script src="{$basePath}/js/netteForms.js"></script>
