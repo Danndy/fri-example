@@ -36,7 +36,7 @@ class Authenticator extends Object implements NS\IAuthenticator
 		$user->last_login = new \DateTime();
 		$this->userModel->save($user);
 		
-        return new NS\Identity($user->user_id, NULL, $user);
+        return new NS\Identity($user->id, NULL, $user);
 	}
 	
 }

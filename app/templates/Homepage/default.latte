@@ -9,6 +9,31 @@
 			<h3 n:block=title class="panel-title">Homepage</h3>
 		</div>
 		<div class="panel-body">
-		  Úvodná stranka prikladu
+		{control searchForm}		     
 		</div>
+		<table class="table table-striped">
+		    <thead>
+			<tr>
+			    <th>#</th>
+			    <th>Meno</th>
+			    <th>Priezvisko</th>
+                            <th>Email</th>
+			    <th>Skupiny</th>
+                            <th>Vek</th>
+			</tr>
+		    </thead>
+
+			<tr n:foreach="$users as $user" id="user{$user->user_id}">
+			    <td>{$user->user_id}</td>
+			    <td>{$user->firstname}</td>
+			    <td>{$user->surname}</td>
+                            <td>{$user->email}</td>
+                            <td>{$user->groups}</td>
+			    <td>{$user->age}</td>
+												    
+			</tr>
+		    
+		    <tbody>
+		    </tbody>
+		</table>
 	</div>

@@ -210,5 +210,66 @@
             "testing",
             "unit"
         ]
+    },
+    {
+        "name": "o5/grido",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/o5/grido.git",
+            "reference": "73b2d1d681e884b45b19504ae050fb1a7ae43746"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/o5/grido/zipball/73b2d1d681e884b45b19504ae050fb1a7ae43746",
+            "reference": "73b2d1d681e884b45b19504ae050fb1a7ae43746",
+            "shasum": ""
+        },
+        "require": {
+            "nette/nette": "~2.0",
+            "php": ">=5.3"
+        },
+        "require-dev": {
+            "dibi/dibi": "@dev",
+            "kdyby/doctrine": "@dev",
+            "mockery/mockery": "@dev",
+            "nette/tester": "@dev",
+            "squizlabs/php_codesniffer": "~1.5.0"
+        },
+        "suggest": {
+            "symfony/property-access": "Allows to use Grido\\PropertyAccessors\\SymfonyPropertyAccessor"
+        },
+        "time": "2014-10-21 13:31:53",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Grido": ""
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3",
+            "GPL-2.0",
+            "GPL-3.0"
+        ],
+        "authors": [
+            {
+                "name": "Petr Bugyík",
+                "homepage": "http://petr.bugyik.cz/"
+            }
+        ],
+        "description": "Grido - DataGrid for Nette Framework",
+        "homepage": "http://o5.github.io/grido-sandbox/",
+        "keywords": [
+            "datagrid",
+            "datalist",
+            "grid",
+            "list",
+            "nette",
+            "table",
+            "tablegrid"
+        ]
     }
 ]

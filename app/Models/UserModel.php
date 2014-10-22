@@ -33,7 +33,7 @@ class UserModel extends \Nette\Object {
 	{
 		$query = $this->database->select('*')
 			->from(self::TABLE)
-			->where(self::TABLE . '.user_id = %i', $id);
+			->where(self::TABLE . '.id = %i', $id);
 
 		return $query->fetch();
 	}
@@ -57,7 +57,7 @@ class UserModel extends \Nette\Object {
 	{
 		$query = $this->database->select('*')
 			->from(self::TABLE)
-			->orderBy(self::TABLE . '.user_id ASC');
+			->orderBy(self::TABLE . '.id ASC');
 		
 		return $query->fetchAll();
 	}
@@ -68,18 +68,18 @@ class UserModel extends \Nette\Object {
 	 */
 	public function save(&$user)
 	{
-		if (!isset($user['user_id']))
+		if (!isset($user['id']))
 		{
 			//hashing password
 			$user['password'] = password_hash($user['password'],PASSWORD_BCRYPT);
 			$this->database->insert(self::TABLE, $user)
 				->execute();
-			$user['user_id'] = $this->database->getInsertId();
+			$user['id'] = $this->database->getInsertId();
 		}
 		else
 		{
 			$this->database->update(self::TABLE, $user)
-				->where(self::TABLE, '.user_id = %i', $user['user_id'])
+				->where(self::TABLE, '.id = %i', $user['id'])
 				->execute();
 		}
 		return $this->database->getAffectedRows() == 1;
@@ -91,11 +91,28 @@ class UserModel extends \Nette\Object {
 	 */
 	public function delete($id)
 	{
+                $this->database->delete('user_groups')->where('user_id ='.$id)->execute();
 		$this->database->delete(self::TABLE)
-			->where(self::TABLE . '.user_id = %i', $id)
+			->where(self::TABLE . '.id = %i', $id)
 			->execute();
 
 		return $this->database->getAffectedRows() == 1;
+	}
+	
+	/*
+	 * @param string $search
+	 * @return array
+	 */
+	public function findByString($searchString)
+	{
+		$query = $this->database->select("*,GROUP_CONCAT(name SEPARATOR ', ') AS groups")
+			->from(self::TABLE )
+			->join('user_groups')->on('('.self::TABLE.'.id = user_groups.user_id)')
+			->join('group')->on('(group.id = user_groups.group_id)')
+                        ->where("firstname LIKE '%$searchString' OR email LIKE '%$searchString' ")
+                        ->groupBy('user.id');		
+                
+                return $query->fetchAll();
 	}
 	
 }

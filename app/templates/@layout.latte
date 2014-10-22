@@ -18,7 +18,7 @@
 
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
+	<link href="https://rawgithub.com/o5/grido/master/client-side/grido.css" rel="stylesheet">
 	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/css/screen.css">
 	<link rel="stylesheet" media="print" href="{$basePath}/css/print.css">
 	<link rel="shortcut icon" href="{$basePath}/favicon.ico">
@@ -43,8 +43,8 @@
 		    <!-- Collect the nav links, forms, and other content for toggling -->
 		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
-			    <li class="active"><a href="#">Skupiny</a></li>
-			    <li><a href="#">Užívatelia</a></li>
+			    <li class=" {ifCurrent User:}active{/ifCurrent}"><a n:href='User:'>Užívatelia</a></li>
+			    <li clas="{ifCurrent Group:}active{/ifCurrent}"><a  n:href='Group:'>Skupiny</a></li>
 			</ul>	    		
 			<ul class="nav navbar-nav navbar-right">
 			    <li class="dropdown">

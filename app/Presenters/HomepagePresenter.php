@@ -3,7 +3,7 @@
 namespace App\Presenters;
 
 use Nette,
-	App\Model;
+	Nette\Application\UI\Form;
 
 
 /**
@@ -12,9 +12,37 @@ use Nette,
 class HomepagePresenter extends BasePresenter
 {
 
-	public function renderDefault()
+	
+	/**
+	 * @inject
+	 * @var \App\Models\UserModel
+	 */
+	public $userModel;
+		 
+	public function renderDefault($search)
 	{
-		$this->template->anyVariable = 'any value';
+		$this->template->anyVariable = $search;
+		$this->template->users = $this->userModel->findByString($search);
+		
 	}
 
+	public function createComponentSearchForm()
+	{
+		$form = new Form;
+		
+		$form->addText('search','Vychladávaj')
+			->setAttribute('placeholder','Vstup pre vyhladávanie');
+		
+		$form->addSubmit('send','Vyhladávať');
+		
+		$form->onSuccess[] = $this->seachFormSucceeded;
+		return $form;
+	}
+	
+	public function seachFormSucceeded($form)
+	{
+		$searchValues = $form->getValues();
+		
+		$this->redirect('HomePage:default', $searchValues['search']);	    
+	}
 }
