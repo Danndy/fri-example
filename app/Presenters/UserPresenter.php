@@ -3,7 +3,7 @@
 namespace App\Presenters;
 
 use Nette,
-    Grido;
+    App\Datagrids\UserGrid;
 
 
 /**
@@ -22,37 +22,12 @@ class UserPresenter extends BasePresenter
 	
 	public function renderDefault()
 	{
-	    
+		
 	}
 
 	public function createComponentUserGrid($name)
 	{
-                $grid = new \Grido\Grid($this, $name);
-                $grid->setModel($this->userModel->findAll());
-
-                $grid->addColumnText('firstname', 'Meno')
-                        ->setSortable()
-                        ->setFilterText()
-                        ->setSuggestion();
-                $grid->addColumnText('surname', 'Priezvisko')
-                        ->setSortable()
-                        ->setFilterText()
-                        ->setSuggestion();
-                $grid->addColumnText('age', 'Vek')
-                        ->setSortable()
-                        ->cellPrototype->class[] = 'center';
-                $grid->addColumnText('email', 'Email')
-                        ->setSortable()
-                        ->setFilterText()
-                        ->setSuggestion();
-                $grid->addColumnDate('last_login', 'Posledné prihlásenie', \Grido\Components\Columns\Date::FORMAT_TEXT)
-                        ->setSortable()
-                        ->setFilterDate();
-                $grid->addActionHref('delete', 'Delete')
-                        ->setConfirm(function($item) {
-                                        return "Naozaj chcete zmazať pouzivatela: {$item->firstname} {$item->surname} ?";
-                                    });
-                return $grid;
+                return new UserGrid($this, $name, $this->userModel); 
 	}
         
         /**
@@ -60,17 +35,20 @@ class UserPresenter extends BasePresenter
 	 */
 	public function actionDelete($id) {
 		$user = $this->userModel->find($id);
+		
 		if (!$user) {
-			$this->flashMessage('Uživatel neexistuje'.$id.'dsa', 'error');
+			$this->flashMessage('Uživatel zo zadaným id neexistuje', 'error');
 		}
-		$this->userModel->delete($id);
-                
-		$this->flashMessage('Uživatel bol zmazaný', 'success');
 		if ($user['id'] == $this->getUser()->getId()) {
-			$this->redirect('Sign:out');
+			$this->flashMessage('Snažíte sa zmazať sám seba!', 'error');
+			$this->redirect('User:');
+		}else{
+			$this->userModel->delete($id);
+			$this->flashMessage('Uživateľ bol zmazany!', 'success');
+			$this->redirect('User:');
 		}
                 
-		$this->redirect('User:');
+		
 	}
 
 }

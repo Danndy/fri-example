@@ -1,5 +1,11 @@
 {block content}
 
-<h2>{if $presenter->action == 'add'}Pridanie{else}Editácia{/if} skupiny</h2>
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 n:block=title class="panel-title">Editácia skupiny</h3>
+	</div>
+	<div class="panel-body">
+		{control groupForm}
 
-{control groupForm}
+	</div>
+</div>

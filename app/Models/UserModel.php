@@ -68,16 +68,14 @@ class UserModel extends \Nette\Object {
 	 */
 	public function save(&$user)
 	{
-		if (!isset($user['id']))
-		{
+		if (!isset($user['id'])){
 			//hashing password
 			$user['password'] = password_hash($user['password'],PASSWORD_BCRYPT);
 			$this->database->insert(self::TABLE, $user)
 				->execute();
 			$user['id'] = $this->database->getInsertId();
 		}
-		else
-		{
+		else{
 			$this->database->update(self::TABLE, $user)
 				->where(self::TABLE, '.id = %i', $user['id'])
 				->execute();
@@ -103,16 +101,15 @@ class UserModel extends \Nette\Object {
 	 * @param string $search
 	 * @return array
 	 */
-	public function findByString($searchString)
+	public function findForGrido()
 	{
 		$query = $this->database->select("*,GROUP_CONCAT(name SEPARATOR ', ') AS groups")
 			->from(self::TABLE )
-			->join('user_groups')->on('('.self::TABLE.'.id = user_groups.user_id)')
-			->join('group')->on('(group.id = user_groups.group_id)')
-                        ->where("firstname LIKE '%$searchString' OR email LIKE '%$searchString' ")
-                        ->groupBy('user.id');		
+			->leftJoin('user_groups')->on('('.self::TABLE.'.id = user_groups.user_id)')
+			->leftJoin('group')->on('(group.id = user_groups.group_id)')                       
+			->groupBy('user.id');		
                 
-                return $query->fetchAll();
+		return $query->fetchAll();
 	}
 	
 }

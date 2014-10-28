@@ -67,7 +67,7 @@ class GroupModel extends \Nette\Object {
 		else
 		{
 			$this->database->update(self::TABLE, $group)
-				->where(self::TABLE,'.id = %i', $group['id'])
+				->where('`'.self::TABLE.'`','.id = %i', $group['id'])
 				->execute();
 		}
 		return $this->database->getAffectedRows() == 1;
@@ -91,39 +91,38 @@ class GroupModel extends \Nette\Object {
 	 * @return array
 	 */
 	public function findAllForGrido($userId)
-	{
+	{	    
+		if(!$userId){ $userId = 0 ; }
 		$query = $this->database->select('*,count(user_id) as pocet, SUM(CASE user_id WHEN '.$userId.' THEN 1 ELSE 0 END) AS ingroup')
 			->from(self::TABLE)
 			->leftJoin(self::ASSOC_TABLE)
-				->on(self::ASSOC_TABLE . '.group_id = ' . self::TABLE . '.id')
-			->groupBy(self::TABLE . '.id');
+				->on(self::ASSOC_TABLE .'.group_id = ' . self::TABLE . '.id')
+			->groupBy(self::TABLE .'.id');
 
 		return $query;
 	}
         
         /**
-	 * @param int $group_id
-	 * @param int $user_id
+	 * @param int $groupId
+	 * @param int $userId
 	 * @return bool
 	 */
-	public function removeUser($group_id, $user_id) {
+	public function removeUser($groupId, $userId) {
 		return $this->database->delete(self::ASSOC_TABLE)
-			->where('group_id = %i AND user_id = %i', $group_id, $user_id)
+			->where('group_id = %i AND user_id = %i', $groupId, $userId)
 			->execute();
 	}
         
         /**
-	 * @param int $group_id
-	 * @param int $user_id
+	 * @param int $groupId
+	 * @param int $userId
 	 * @return bool
 	 */
-	public function addUser($group_id, $user_id) {
+	public function addUser($groupId, $userId) {
 		return $this->database->insert(self::ASSOC_TABLE, array(
-			'group_id' => $group_id, 
-			'user_id' => $user_id
+			'group_id' => $groupId, 
+			'user_id' => $userId
 		))->execute();
-	}
-        
-        
+	}      
   
 }

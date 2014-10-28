@@ -3,7 +3,7 @@
 namespace App\Presenters;
 
 use Nette,
-    Grido;
+    App\Datagrids\GroupGrid;
 
 
 /**
@@ -22,34 +22,12 @@ class GroupPresenter extends BasePresenter
 	
 	public function renderDefault()
 	{
-	    
+		
 	}
 
 	public function createComponentGroupGrid($name)
 	{
-		$grid = new \Grido\Grid($this, $name);
-                $grid->setModel($this->groupModel->findAllForGrido($this->getUser()->getId()));
-
-                $grid->addColumnText('name', 'Názov skupiny')
-                        ->setSortable()
-                        ->setFilterText()
-                        ->setSuggestion();
-                $grid->addColumnText('description', 'Popis skupiny');
-                $grid->addColumnText('pocet', 'Počet členov')->setSortable();
-                $grid->addActionHref('addToGroup', 'Pridaj sa do skupiny')
-                        ->setDisable(function($row) {
-                                    return $row['ingroup'] > 0;
-                            });
-                $grid->addActionHref('removeFromGroup', 'Odober sa zo skupiny')
-                        ->setDisable(function($row) {
-                                    return $row['ingroup'] == 0;
-                            });
-                $grid->addActionHref('edit', 'Uprav skupinu');
-                $grid->addActionHref('delete', 'Zmaž skupinu')
-                            ->setConfirm(function($item) {
-                                    return "Určite chcete zmazať skupinu {$item->name}?";
-                            });
-                return $grid;
+		return new GroupGrid($this, $name, $this->groupModel, $this->getUser()->getId());                
 	}
         
         /**
@@ -57,12 +35,17 @@ class GroupPresenter extends BasePresenter
 	 */
 	public function actionAddToGroup($id) {
 		$group = $this->groupModel->find($id);
+		
+		if(!$this->getUser()->isLoggedIn()){
+			$this->redirect('Sign:in');
+		}
+		
 		if (!$group) {
 			$this->flashMessage('Skupina neexistuje!', 'error');
 		}
 		else {
 			$this->groupModel->addUser($id, $this->getUser()->getId());
-			$this->flashMessage('Uzivatel bol pridanýdo skupiny' . $group['name'], 'success');
+			$this->flashMessage('Užívatel bol pridaný do skupiny' . $group['name'], 'success');
 		}
 		$this->redirect('Group:');
 	}
@@ -77,7 +60,7 @@ class GroupPresenter extends BasePresenter
 		}
 		else {
 			$this->groupModel->removeUser($id, $this->getUser()->getId());
-			$this->flashMessage('Uzivatel bol pridanýdo skupiny'  . $group['name'], 'success');
+			$this->flashMessage('Užívatel bol pridanýdo skupiny'  . $group['name'], 'success');
 		}
 		$this->redirect('Group:');
 	}
@@ -102,9 +85,8 @@ class GroupPresenter extends BasePresenter
 	{
 		$group = $this->groupModel->find($id);
 
-		if (!$group)
-		{
-			$this->error('Skupina neexistuje.', 404);
+		if (!$group) {
+			$this->flashMessage('Skupina neexistuje!.', 'error');
 		}
 
 		$this['groupForm']->setDefaults($group);
@@ -117,9 +99,9 @@ class GroupPresenter extends BasePresenter
 	 */
 	public function groupFormSubmitted(\App\Forms\GroupForm $form)
 	{
-		$group = $form->getValues(TRUE);
+		$group = $form->getValues(true);
+		
 		$this->groupModel->save($group);
-
 		$this->flashMessage('Skupina upravena!.', 'success');
 		$this->redirect('default');
 	}

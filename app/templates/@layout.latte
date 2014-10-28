@@ -37,14 +37,14 @@
 			    <span class="icon-bar"></span>
 			    <span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="#">FRI Example</a>
+			<a class="navbar-brand" n:href="HomePage:">FRI Example</a>
 		    </div>
 
 		    <!-- Collect the nav links, forms, and other content for toggling -->
 		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav">
 			    <li class=" {ifCurrent User:}active{/ifCurrent}"><a n:href='User:'>Užívatelia</a></li>
-			    <li clas="{ifCurrent Group:}active{/ifCurrent}"><a  n:href='Group:'>Skupiny</a></li>
+			    <li class="{ifCurrent Group:}active{/ifCurrent}"><a  n:href='Group:'>Skupiny</a></li>
 			</ul>	    		
 			<ul class="nav navbar-nav navbar-right">
 			    <li class="dropdown">
@@ -81,6 +81,7 @@
 	</div>
 	{block scripts}
 	<script src="{$basePath}/js/jquery.js"></script>
+	<script src="{$basePath}/js/jquery.nette.js"></script>
 	<script src="{$basePath}/js/netteForms.js"></script>
 	<script src="{$basePath}/js/main.js"></script>
 	{/block}

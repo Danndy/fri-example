@@ -2,8 +2,7 @@
 
 namespace App\Presenters;
 
-use Nette,
-	Nette\Application\UI\Form;
+use App\Datagrids\UserGroupGrid;
 
 
 /**
@@ -11,7 +10,6 @@ use Nette,
  */
 class HomepagePresenter extends BasePresenter
 {
-
 	
 	/**
 	 * @inject
@@ -19,30 +17,9 @@ class HomepagePresenter extends BasePresenter
 	 */
 	public $userModel;
 		 
-	public function renderDefault($search)
+	public function createComponentUserGroupGrid($name)
 	{
-		$this->template->anyVariable = $search;
-		$this->template->users = $this->userModel->findByString($search);
-		
-	}
-
-	public function createComponentSearchForm()
-	{
-		$form = new Form;
-		
-		$form->addText('search','Vychladávaj')
-			->setAttribute('placeholder','Vstup pre vyhladávanie');
-		
-		$form->addSubmit('send','Vyhladávať');
-		
-		$form->onSuccess[] = $this->seachFormSucceeded;
-		return $form;
+		return new UserGroupGrid($this, $name, $this->userModel);
 	}
 	
-	public function seachFormSucceeded($form)
-	{
-		$searchValues = $form->getValues();
-		
-		$this->redirect('HomePage:default', $searchValues['search']);	    
-	}
 }

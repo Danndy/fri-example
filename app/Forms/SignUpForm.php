@@ -26,7 +26,7 @@ class SignUpForm extends \Nette\Application\UI\Form {
 			->setRequired('Zadaj platný email!.');
 		
 		$this->addText('age', 'Vek:')
-			->addRule(self::INTEGER, 'Vek musí byt číslo')
+			->addRule(self::INTEGER, 'Vek musí byt celé číslo')
 			->addRule(self::RANGE, 'Vek musí byť v intervale od %d do %d', array(15, 100))
 			->setRequired('Zadaj vek.');
 

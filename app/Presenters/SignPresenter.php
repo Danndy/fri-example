@@ -27,7 +27,8 @@ class SignPresenter extends BasePresenter
 	{
 		if ($this->getUser()->isLoggedIn())
 		{
-			$this->error('Access denied.', 403);
+			$this->flashMessage('Už ste prihláseny!');
+			$this->redirect('Homepage:');
 		}
 		
 		$form = new \App\Forms\SignInForm;
@@ -43,8 +44,8 @@ class SignPresenter extends BasePresenter
 	{
 		if ($this->getUser()->isLoggedIn())
 		{
-			$this->error('Access denied.', 403);
-		}
+			$this->redirect('Homepage:');
+		}		
 		
 		$form = new \App\Forms\SignUpForm;
 		$form->onSuccess[] = $this->signUpFormSucceeded;
@@ -58,10 +59,11 @@ class SignPresenter extends BasePresenter
 	public function signUpFormSucceeded($form)
 	{
 		$user = $form->getValues(true);
+		
 		unset($user['password2']);
 		
-		if (($this->userModel->findByEmail($user['email'])) != false) {
-			$form['email']->addError("Účet pod týmto emailom uz je v databáze!");
+		if ($this->userModel->findByEmail($user['email'])) {
+			$form['email']->addError("Účet k tomuto emailu už existuje!");
 		}
 		elseif ($this->userModel->save($user)) {
 			$this->flashMessage('Účet bol vytvorený');
@@ -95,7 +97,7 @@ class SignPresenter extends BasePresenter
 	public function actionOut()
 	{
 		$this->getUser()->logout();
-		$this->flashMessage('You have been signed out.');
+		$this->flashMessage('Bol si odhlásený.');
 		$this->redirect('in');
 	}
 
